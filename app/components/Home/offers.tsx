@@ -21,8 +21,8 @@ const hotels: Hotel[] = [
 
 const Offers = () => {
   return (
-    <section className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Hotels selected for you</h2>
+    <section className="p-6 bg-gray-300">
+      <h2 className="text-3xl font-bold mb-4">Hotels selected for you</h2>
       {/* <div className="h-1 w-32 bg-teal-900 mb-6 rounded-full"></div> */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-6">
@@ -46,10 +46,10 @@ const Offers = () => {
 
             <div className="absolute bottom-0 left-0 w-full p-3 text-white">
               <h3 className="font-semibold text-sm">{hotel.nameEn}</h3>
-              <p className="text-xs">{hotel.nameAr}</p>
+              <p className="text-ms">{hotel.nameAr}</p>
               <div className="flex justify-between items-center mt-2 text-xs">
-                <span>No ratings</span>
-                <span className="bg-teal-900 px-2 py-0.5 rounded text-white text-sm">
+                <span> &#9733; No ratings</span>
+                <span className="bg-[#003243] px-3 py-1 rounded text-white text-sm">
                   Night/{hotel.price} ريال
                 </span>
               </div>

@@ -12,10 +12,10 @@ export default function Footer() {
         <div>
           <h3 className="text-white font-semibold mb-4">Quick Links</h3>
           <ul className="space-y-2">
-            <li><a href="#" className="hover:text-white">Contact Us</a></li>
-            <li><a href="#" className="hover:text-white">About Us</a></li>
-            <li><a href="#" className="hover:text-white">Hotels</a></li>
-            <li><a href="#" className="hover:text-white">Blogs</a></li>
+            <li><a href="/contact" className="hover:text-white">Contact Us</a></li>
+            <li><a href="/about" className="hover:text-white">About Us</a></li>
+            <li><a href="/hotel" className="hover:text-white">Hotels</a></li>
+            <li><a href="/" className="hover:text-white">Blogs</a></li>
           </ul>
         </div>
 
@@ -69,7 +69,7 @@ export default function Footer() {
 
       {/* Bottom section */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-        <p>Copyright © 2025 AL-Riffa</p>
+        <p>Copyright &copy; 2025 AL-Riffa</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a
             className="text-white border border-gray-200 p-3 rounded-full transition-colors"

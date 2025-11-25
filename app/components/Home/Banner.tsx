@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useState as useReactState } from "react";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
 
 type GuestDetails = {
   room: number;
@@ -19,6 +20,8 @@ export default function Banner() {
   });
   const [showGuestPopup, setShowGuestPopup] = useState(false);
   const [headerHeight, setHeaderHeight] = useReactState(0);
+  const [menuTopPosition, setMenuTopPosition] = useReactState(0);
+  const [menuLeftPosition, setMenuLeftPosition] = useReactState(0);
   const popupRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = () => {
@@ -64,6 +67,15 @@ export default function Banner() {
     });
   };
 
+  const toggleGuestMenu = () => {
+    if (!showGuestPopup && popupRef.current) {
+      const rect = popupRef.current.getBoundingClientRect();
+      setMenuTopPosition(rect.bottom + window.scrollY);
+      setMenuLeftPosition(rect.left + window.scrollX);
+    }
+    setShowGuestPopup(!showGuestPopup);
+  };
+
   return (
     <section
       className="relative h-[420px] w-full flex items-center justify-center overflow-hidden transition-all duration-300"
@@ -90,7 +102,7 @@ export default function Banner() {
             <label className="absolute left-3 top-2.5 text-gray-500 text-xs">
               City
             </label>
-            <span className="text-gray-700 text-ms mt-0.5">Makkah</span>
+            <span className="font-medium text-ms mt-0.5">Makkah</span>
           </div>
 
           {/* Arrival Date */}
@@ -131,13 +143,13 @@ export default function Banner() {
             <div className="w-full relative">
               <button
                 type="button"
-                onClick={() => setShowGuestPopup((s) => !s)}
+                onClick={() => toggleGuestMenu()}
                 className="peer w-full text-left px-3 pt-5 pb-1 rounded focus:outline-none"
               >
                 <label className="absolute left-3 top-2.5 text-gray-500 text-xs">
                   Guests & Rooms
                 </label>
-                <div className="text-black text-xs mt-0.5 truncate">
+                <div className="text-black font-medium text-sm mt-1 truncate">
                   {guestDetails.room} Room{guestDetails.room !== 1 ? "s" : ""},{" "}
                   {guestDetails.adult} Adult{guestDetails.adult !== 1 ? "s" : ""},{" "}
                   {guestDetails.children} Child
@@ -146,69 +158,76 @@ export default function Banner() {
               </button>
 
               {showGuestPopup && (
-                <div className="absolute top-full left-0 mt-2 bg-white shadow-lg rounded-md w-full p-2 text-xs z-20">
-                  {(
-                    [
-                      { label: "Room", key: "room" },
-                      { label: "Adult", key: "adult" },
-                      { label: "Children", key: "children" },
-                    ] as { label: string; key: keyof GuestDetails }[]
-                  ).map((item) => (
-                    <div
-                      key={item.key}
-                      className="flex items-center justify-between mb-1.5 last:mb-0"
-                    >
-                      <span className="text-gray-700 font-medium">{item.label}</span>
-                      <div className="flex items-center space-x-1">
+                createPortal(
+                  (
+                    <div className="absolute mt-2 bg-white shadow-lg rounded-md w-[80%] lg:w-fit p-2 text-xs z-20" style={{
+                      top: menuTopPosition,
+                      left: menuLeftPosition,
+                    }}>
+                      {(
+                        [
+                          { label: "Room", key: "room" },
+                          { label: "Adult", key: "adult" },
+                          { label: "Children", key: "children" },
+                        ] as { label: string; key: keyof GuestDetails }[]
+                      ).map((item) => (
+                        <div
+                          key={item.key}
+                          className="flex items-center justify-between mb-1.5 last:mb-0"
+                        >
+                          <span className="text-gray-700 font-medium">{item.label}</span>
+                          <div className="flex items-center space-x-1">
+                            <button
+                              type="button"
+                              onClick={() => changeDetail(item.key, -1)}
+                              className="px-1.5 py-0.5 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                              -
+                            </button>
+                            <span className="w-4 text-center">
+                              {guestDetails[item.key]}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => changeDetail(item.key, 1)}
+                              className="px-1.5 py-0.5 bg-gray-200 rounded hover:bg-gray-300"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+
+                      <div className="flex justify-between mt-2 space-x-2">
                         <button
                           type="button"
-                          onClick={() => changeDetail(item.key, -1)}
-                          className="px-1.5 py-0.5 bg-gray-200 rounded hover:bg-gray-300"
+                          onClick={() =>
+                            setGuestDetails({ room: 0, adult: 0, children: 0 })
+                          }
+                          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-xs font-medium"
                         >
-                          -
+                          Reset
                         </button>
-                        <span className="w-4 text-center">
-                          {guestDetails[item.key]}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => changeDetail(item.key, 1)}
-                          className="px-1.5 py-0.5 bg-gray-200 rounded hover:bg-gray-300"
-                        >
-                          +
-                        </button>
+                        <div className="space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowGuestPopup(false)}
+                            className="px-3 py-1 border rounded hover:bg-gray-200 text-xs font-medium"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setShowGuestPopup(false)}
+                            className="px-3 py-1 bg-[#003243] text-white rounded text-xs font-medium"
+                          >
+                            Confirm
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  ))}
-
-                  <div className="flex justify-between mt-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setGuestDetails({ room: 0, adult: 0, children: 0 })
-                      }
-                      className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-xs font-medium"
-                    >
-                      Reset
-                    </button>
-                    <div className="space-x-2">
-                      <button
-                        type="button"
-                        onClick={() => setShowGuestPopup(false)}
-                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-xs font-medium"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowGuestPopup(false)}
-                        className="px-3 py-1 bg-gray-500 text-white rounded text-xs font-medium"
-                      >
-                        Confirm
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                  ), document.body
+                )
               )}
             </div>
           </div>
@@ -217,7 +236,7 @@ export default function Banner() {
           <div className="flex flex-col justify-end">
             <button
               onClick={handleSearch}
-              className="bg-[#EF4050] hover:bg-[#d93848] text-white px-10 py-1.5 rounded transition w-full md:w-auto h-full text-ms font-medium"
+              className="bg-[#EF4050] hover:bg-[#d93848] text-white px-10 py-1.5 mb-5 lg:mb-0 rounded transition w-full md:w-auto h-full text-ms font-medium"
             >
               Search Hotels
             </button>

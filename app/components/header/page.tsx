@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FaBars, FaTimes, FaGlobe } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,21 +20,24 @@ export default function Header() {
   const otherLanguage = language === "English" ? "Arabic" : "English";
 
   return (
-    <header className="bg-gradient-to-r from-[#1F8593] to-[#052E39] text-white fixed top-0 left-0 w-full z-50 shadow-md">
+    <header className="bg-linear-to-r from-[#1F8593] to-[#052E39] text-white fixed top-0 left-0 w-full z-50 shadow-md">
       <div className="flex items-center justify-between max-w-7xl mx-auto px-6 h-20">
         {/* Logo */}
         <div className="flex items-center space-x-2">
+          <Link href="/" >
           <div className="bg-white rounded-full w-auto h-auto flex justify-center items-center">
             <img src="/logo.png" alt="Al Refa logo" className="h-16 w-16 object-cover" />
           </div>
+          </Link>
         </div>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center space-x-7 relative">
-          <a href="#" className="hover:underline">Home</a>
-          <a href="#" className="hover:underline">About</a>
-          <a href="#" className="hover:underline">Contact Us</a>
-          <a href="#" className="hover:underline">Blog</a>
+          <a href="/" className="hover:underline">Home</a>
+          <a href="/about" className="hover:underline">About Us</a>
+          <a href="/hotel" className="hover:underline">Hotels</a>
+          <a href="/contact" className="hover:underline">Contact Us</a>
+          <a href="/" className="hover:underline">Blog</a>
 
           {/* Language Dropdown */}
           <div className="relative">
@@ -95,10 +99,11 @@ export default function Header() {
         </div>
 
         <nav className="flex flex-col space-y-4 p-6 text-lg">
-          <a href="#" className="hover:text-teal-600" onClick={toggleMenu}>Home</a>
-          <a href="#" className="hover:text-teal-600" onClick={toggleMenu}>About</a>
-          <a href="#" className="hover:text-teal-600" onClick={toggleMenu}>Contact Us</a>
-          <a href="#" className="hover:text-teal-600" onClick={toggleMenu}>Blog</a>
+          <a href="/" className="hover:text-teal-600" onClick={toggleMenu}>Home</a>
+          <a href="/about" className="hover:text-teal-600" onClick={toggleMenu}>About Us</a>
+          <a href="/hotel" className="hover:text-teal-600" onClick={toggleMenu}>Hotels</a>
+          <a href="/contact" className="hover:text-teal-600" onClick={toggleMenu}>Contact Us</a>
+          <a href="/" className="hover:text-teal-600" onClick={toggleMenu}>Blog</a>
 
           {/* Language Dropdown Mobile */}
           <div className="relative">
